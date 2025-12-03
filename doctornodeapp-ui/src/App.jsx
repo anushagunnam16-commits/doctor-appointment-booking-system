@@ -8,7 +8,9 @@ import Doctors from "./pages/Doctors.jsx";
 import Appointments from "./pages/Appointments.jsx"; // << Book page
 import MyAppointments from "./pages/MyAppointments.jsx";
 import DoctorAppointments from "./pages/DoctorAppointments.jsx";
-
+import AdminDoctorsPage from "./pages/admin/AdminDoctorsPage";
+import AdminAppointmentsPage from "./pages/admin/AdminAppointmentsPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
 
 function Home() {
     return (
@@ -34,6 +36,10 @@ export default function App() {
         <Route path="/book" element={<Appointments />} />   {/* <- NEW */}
         <Route path="/appointments" element={<MyAppointments />} />
          <Route path="/doctor-appointments" element={<DoctorAppointments />} />
+         <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
+         <Route path="/admin/appointments" element={<AdminAppointmentsPage />} />
+         <Route path="/admin/users" element={<AdminUsersPage />} />
+
         <Route path="*" element={<Home />} />
 
       </Routes>

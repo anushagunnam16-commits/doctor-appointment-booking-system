@@ -531,6 +531,98 @@ const appointments = {
     }
   },
 };
+/* ============== ADMIN ============== */
+const admin = {
+  doctors: {
+    // GET /api/admin/doctors
+    list: async (req, res) => {
+      try {
+        const { q, city } = req.query || {};
+        const doctors = await m.doctors.search({ q, city });
+        return res.json({ ok: true, doctors });
+      } catch (e) {
+        console.error("admin.doctors.list error", e);
+        return res.status(500).json({ error: "Server error", detail: e.message });
+      }
+    },
+
+    // POST /api/admin/doctors
+    create: async (req, res) => {
+      try {
+        const { name, email, phone, specialtyId, city, fee } = req.body || {};
+
+        if (!name || !email) {
+          return res
+            .status(400)
+            .json({ error: "name and email are required" });
+        }
+
+        // prevent duplicate doctor email
+        const existing = await m.doctors.findByEmail(email);
+        if (existing) {
+          return res
+            .status(409)
+            .json({ error: "A doctor with this email already exists" });
+        }
+
+        const id = await m.doctors.create({
+          name,
+          email,
+          phone,
+          specialtyId,
+          city,
+          fee,
+        });
+
+        const doc = await m.doctors.findById(id);
+
+        return res.status(201).json({
+          ok: true,
+          message: "Doctor created successfully",
+          doctor: doc,
+        });
+      } catch (e) {
+        console.error("admin.doctors.create error", e);
+        return res.status(500).json({ error: "Server error", detail: e.message });
+      }
+    },
+  },
+   users: {
+    // GET /api/admin/users
+    list: async (req, res) => {
+      try {
+        const users = await m.users.listAll();
+        return res.json({ ok: true, users });
+      } catch (e) {
+        console.error("admin.users.list error", e);
+        return res.status(500).json({ error: "Server error", detail: e.message });
+      }
+    },
+  },
+
+  appointments: {
+    // GET /api/admin/appointments?doctorId=&patientId=&date=
+    list: async (req, res) => {
+      try {
+        const doctorId  = req.query.doctorId ? Number(req.query.doctorId) : undefined;
+        const patientId = req.query.patientId ? Number(req.query.patientId) : undefined;
+        const date      = req.query.date || undefined; // YYYY-MM-DD or undefined
+
+        const appointments = await m.appointments.listAll({
+          doctorId,
+          patientId,
+          date,
+        });
+
+        return res.json({ ok: true, appointments });
+      } catch (e) {
+        console.error("admin.appointments.list error", e);
+        return res.status(500).json({ error: "Server error", detail: e.message });
+      }
+    },
+  },
+};
 
 /* ============== EXPORT ============== */
-module.exports = { auth, users, doctors, appointments };
+module.exports = { auth, users, doctors, appointments, admin };
+

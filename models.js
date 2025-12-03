@@ -56,6 +56,14 @@ exports.users = {
     const pool = await poolPromise;
     await pool.execute("UPDATE users SET email_verified = 1 WHERE id = ?", [id]);
   },
+    async listAll() {
+    const pool = await poolPromise;
+    const [rows] = await pool.execute(
+      "SELECT id, name, email, role, phone, gender, dob, email_verified FROM users ORDER BY id ASC"
+    );
+    return rows;
+  },
+
 };
 
 /* ============ EMAIL VERIFICATIONS (ONE-TIME CODES) ============ */
@@ -262,4 +270,55 @@ exports.appointments = {
     );
     return rows;
   },
+
+  // ✅ NEW: All appointments for admin (with optional filters)
+  async listAll({ doctorId, patientId, date }) {
+    const pool = await poolPromise;
+
+    const conditions = [];
+    const params = [];
+
+    if (doctorId) {
+      conditions.push("a.doctor_id = ?");
+      params.push(doctorId);
+    }
+
+    if (patientId) {
+      conditions.push("a.patient_id = ?");
+      params.push(patientId);
+    }
+
+    if (date) {
+      conditions.push("a.date = ?");
+      params.push(date);
+    }
+
+    let whereClause = "";
+    if (conditions.length > 0) {
+      whereClause = "WHERE " + conditions.join(" AND ");
+    }
+
+    const sql = `
+      SELECT a.id,
+             a.doctor_id  AS doctorId,
+             a.patient_id AS patientId,
+             DATE_FORMAT(a.date,'%Y-%m-%d') AS date,
+             a.time,
+             a.status,
+             d.name AS doctorName,
+             d.city,
+             d.fee,
+             u.name  AS patientName,
+             u.email AS patientEmail
+        FROM appointments a
+        LEFT JOIN doctors d ON d.id = a.doctor_id
+        LEFT JOIN users   u ON u.id = a.patient_id
+        ${whereClause}
+       ORDER BY a.date ASC, a.time ASC
+    `;
+
+    const [rows] = await pool.execute(sql, params);
+    return rows;
+  },
 };
+
