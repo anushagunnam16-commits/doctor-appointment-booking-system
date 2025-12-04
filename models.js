@@ -63,6 +63,14 @@ exports.users = {
     );
     return rows;
   },
+    async updatePassword(id, passwordHash) {
+    const pool = await poolPromise;
+    await pool.execute(
+      "UPDATE users SET password_hash = ? WHERE id = ?",
+      [passwordHash, id]
+    );
+  },
+
 
 };
 
@@ -86,6 +94,33 @@ exports.emailVerifications = {
     const pool = await poolPromise;
     const [rows] = await pool.execute(
       "SELECT id, user_id, code, expires_at FROM email_verifications WHERE user_id = ? AND code = ? AND expires_at > NOW() LIMIT 1",
+      [userId, code]
+    );
+    return rows[0];
+  },
+};
+
+
+/* ============ PASSWORD RESETS (OTP CODES) ============ */
+exports.passwordResets = {
+  async deleteForUser(userId) {
+    const pool = await poolPromise;
+    await pool.execute("DELETE FROM password_resets WHERE user_id = ?", [userId]);
+  },
+
+  async createCode(userId, code, expiresAt) {
+    const pool = await poolPromise;
+    await this.deleteForUser(userId);
+    await pool.execute(
+      "INSERT INTO password_resets (user_id, code, expires_at) VALUES (?, ?, ?)",
+      [userId, code, expiresAt]
+    );
+  },
+
+  async findValid(userId, code) {
+    const pool = await poolPromise;
+    const [rows] = await pool.execute(
+      "SELECT id, user_id, code, expires_at FROM password_resets WHERE user_id = ? AND code = ? AND expires_at > NOW() LIMIT 1",
       [userId, code]
     );
     return rows[0];

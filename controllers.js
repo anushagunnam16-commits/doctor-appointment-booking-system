@@ -155,6 +155,30 @@ const auth = {
     }
   },
 
+  forgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body || {};
+      if (!email) return res.status(400).json({ error: "email required" });
+
+      if (!canResend(email)) {
+        return res.status(429).json({ error: "Please wait before requesting another code." });
+      }
+
+      const user = await m.users.findByEmail(email);
+      // return a neutral response to avoid account enumeration
+      if (!user) return res.json({ ok: true, message: "If that email exists, a reset code has been sent." });
+
+      const code = genCode6();
+      const expiresAt = minutesFromNow(VERIFY_EXP_MIN);
+      await m.passwordResets.createCode(user.id, code, expiresAt);
+      console.log(`[password:reset] code for ${email}: ${code} (expires ${expiresAt.toISOString()})`);
+
+      res.json({ ok: true, message: "Password reset code sent." });
+    } catch (e) {
+      res.status(500).json({ error: "Server error", detail: e.message });
+    }
+  },
+
   login: async (req, res) => {
     try {
       const { email, password } = req.body || {};
@@ -183,6 +207,46 @@ const auth = {
       res.status(500).json({ error: "Server error", detail: e.message });
     }
   },
+    resetPassword: async (req, res) => {
+    try {
+      const { email, code, password } = req.body || {};
+
+      if (!email || !code || !password) {
+        return res
+          .status(400)
+          .json({ error: "email, code, and password are required" });
+      }
+
+      if (password.length < 6) {
+        return res
+          .status(400)
+          .json({ error: "Password must be at least 6 characters" });
+      }
+
+      const user = await m.users.findByEmail(email);
+      if (!user) {
+        return res.status(400).json({ error: "Invalid email or code" });
+      }
+
+      const row = await m.passwordResets.findValid(user.id, code);
+      if (!row) {
+        return res.status(400).json({ error: "Invalid or expired code" });
+      }
+
+      const hash = await bcrypt.hash(password, 10);
+      await m.users.updatePassword(user.id, hash);
+      await m.passwordResets.deleteForUser(user.id);
+
+      return res.json({
+        ok: true,
+        message: "Password updated. You can now log in.",
+      });
+    } catch (e) {
+      console.error("resetPassword error", e);
+      res.status(500).json({ error: "Server error", detail: e.message });
+    }
+  },
+
 };
 
 /* ============== USERS ============== */

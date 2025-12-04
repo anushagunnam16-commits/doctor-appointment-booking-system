@@ -11,6 +11,8 @@ import DoctorAppointments from "./pages/DoctorAppointments.jsx";
 import AdminDoctorsPage from "./pages/admin/AdminDoctorsPage";
 import AdminAppointmentsPage from "./pages/admin/AdminAppointmentsPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function Home() {
     return (
@@ -39,7 +41,8 @@ export default function App() {
          <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
          <Route path="/admin/appointments" element={<AdminAppointmentsPage />} />
          <Route path="/admin/users" element={<AdminUsersPage />} />
-
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+  <Route path="/reset-password"  element={<ResetPassword />} />
         <Route path="*" element={<Home />} />
 
       </Routes>

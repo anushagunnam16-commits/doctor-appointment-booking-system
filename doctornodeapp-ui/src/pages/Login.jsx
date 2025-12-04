@@ -71,9 +71,14 @@ export default function Login() {
           </button>
         </form>
         
-        <p className="helper" style={{ marginTop: "14px", textAlign: "center" }}>
+                <p className="helper" style={{ marginTop: 10 }}>
+          <Link to="/forgot-password">Forgot password?</Link>
+        </p>
+
+        <p className="helper" style={{ marginTop: 8 }}>
           New here? <Link to="/register">Create an account</Link>
         </p>
+
       </div>
     </div>
   );

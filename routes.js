@@ -25,57 +25,28 @@ router.post("/api/doctors",          ctrl.auth.requireAuth, ctrl.doctors.create)
 router.get("/api/doctors/:doctorId", ctrl.auth.requireAuth, ctrl.doctors.detail);
 
 /* ========= APPOINTMENTS & SLOTS ========= */
-router.get ("/api/slots",
-  ctrl.auth.requireAuth,
-  ctrl.appointments.slotsForDay
-);
+router.get ("/api/slots", ctrl.auth.requireAuth, ctrl.appointments.slotsForDay);
 
-router.post("/api/appointments/book",
-  ctrl.auth.requireAuth,
-  ctrl.appointments.book
-);
+router.post("/api/appointments/book", ctrl.auth.requireAuth,  ctrl.appointments.book);
 
-router.get ("/api/appointments/mine",
-  ctrl.auth.requireAuth,
-  ctrl.appointments.listMine
-);
+router.get ("/api/appointments/mine",ctrl.auth.requireAuth, ctrl.appointments.listMine);
 
 /* manage existing appointments */
-router.post("/api/appointments/:id/cancel",
-  ctrl.auth.requireAuth,
-  ctrl.appointments.cancel
-);
+router.post("/api/appointments/:id/cancel",ctrl.auth.requireAuth, ctrl.appointments.cancel);
 
-router.post("/api/appointments/:id/reschedule",
-  ctrl.auth.requireAuth,
-  ctrl.appointments.reschedule
-);
+router.post("/api/appointments/:id/reschedule", ctrl.auth.requireAuth, ctrl.appointments.reschedule);
+
 
 /* doctor-side views */
-router.get("/api/appointments/doctor",
-  ctrl.auth.requireAuth,
-  ctrl.auth.requireRole("doctor"),
-  ctrl.appointments.listForDoctor
-);
+router.get("/api/appointments/doctor",  ctrl.auth.requireAuth, ctrl.auth.requireRole("doctor"),ctrl.appointments.listForDoctor);
 
-router.post("/api/appointments/:id/status",
-  ctrl.auth.requireAuth,
-  ctrl.auth.requireRole("doctor"),
-  ctrl.appointments.updateStatus
-);
+router.post("/api/appointments/:id/status", ctrl.auth.requireAuth, ctrl.auth.requireRole("doctor"), ctrl.appointments.updateStatus);
 
 /* ========= ADMIN: DOCTORS ========= */
-router.get("/api/admin/doctors",
-  ctrl.auth.requireAuth,
-  ctrl.auth.requireRole("admin"),
-  ctrl.admin.doctors.list
-);
+router.get("/api/admin/doctors", ctrl.auth.requireAuth, ctrl.auth.requireRole("admin"),ctrl.admin.doctors.list);
 
-router.post("/api/admin/doctors",
-  ctrl.auth.requireAuth,
-  ctrl.auth.requireRole("admin"),
-  ctrl.admin.doctors.create
-);
+router.post("/api/admin/doctors",ctrl.auth.requireAuth,ctrl.auth.requireRole("admin"),ctrl.admin.doctors.create);
+
 
 /* ========= ADMIN: USERS ========= */
 router.get("/api/admin/users",
@@ -90,6 +61,10 @@ router.get("/api/admin/appointments",
   ctrl.auth.requireRole("admin"),
   ctrl.admin.appointments.list
 );
+
+router.post("/api/auth/forgot-password", ctrl.auth.forgotPassword);
+router.post("/api/auth/reset-password",  ctrl.auth.resetPassword);
+
 
 console.log("routes loaded (appointments + slots)");
 
