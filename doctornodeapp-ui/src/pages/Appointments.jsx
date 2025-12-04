@@ -7,8 +7,8 @@ import { rescheduleAppointment } from "../services/appointments";
 
 function Section({ title, children }) {
   return (
-    <div style={{ marginTop: 18 }}>
-      <div className="helper" style={{ fontWeight: 700, marginBottom: 8 }}>
+    <div style={{ marginTop: "clamp(14px, 2vw, 18px)" }}>
+      <div className="helper" style={{ fontWeight: 700, marginBottom: "clamp(6px, 1vw, 8px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}>
         {title}
       </div>
       {children}
@@ -24,9 +24,10 @@ function Chip({ active, disabled, label, onClick, title }) {
       onClick={onClick}
       disabled={disabled}
       style={{
-        padding: "8px 12px",
+        padding: "clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 12px)",
         borderRadius: 12,
         fontWeight: 700,
+        fontSize: "clamp(12px, 1.3vw, 13px)",
         background: active
           ? "linear-gradient(135deg, var(--blue-600), var(--blue-800))"
           : "#fff",
@@ -35,6 +36,7 @@ function Chip({ active, disabled, label, onClick, title }) {
         boxShadow: active ? "var(--shadow)" : "none",
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
+        whiteSpace: "nowrap"
       }}
     >
       {label}
@@ -49,17 +51,17 @@ export default function Appointments() {
 
   if (!isAuthed) {
     return (
-      <div className="container">
-        <div className="card" style={{ maxWidth: 700, margin: "32px auto" }}>
-          <h1>Sign in to book</h1>
-          <p className="subtitle">
+      <div className="container" style={{ padding: "clamp(16px, 3vw, 24px)" }}>
+        <div className="card" style={{ width: "100%", maxWidth: 700, margin: "clamp(20px, 4vw, 32px) auto" }}>
+          <h1 style={{ fontSize: "clamp(28px, 6vw, 36px)" }}>Sign in to book</h1>
+          <p className="subtitle" style={{ fontSize: "clamp(14px, 2vw, 16px)" }}>
             You need to be logged in to view slots and book an appointment.
           </p>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Link className="btn" to="/login">
+          <div style={{ display: "flex", gap: "clamp(8px, 2vw, 12px)", flexWrap: "wrap" }}>
+            <Link className="btn" to="/login" style={{ flex: "1 1 100px", padding: "12px 16px", fontSize: "clamp(13px, 1.5vw, 14px)" }}>
               Go to Login
             </Link>
-            <Link className="btn" to="/register">
+            <Link className="btn" to="/register" style={{ flex: "1 1 100px", padding: "12px 16px", fontSize: "clamp(13px, 1.5vw, 14px)" }}>
               Create account
             </Link>
           </div>
@@ -192,29 +194,29 @@ export default function Appointments() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ marginTop: 24 }}>
-        <h1>{rescheduleId ? "Reschedule Appointment" : "Book an Appointment"}</h1>
-        <p className="subtitle">
+    <div className="container" style={{ padding: "clamp(16px, 3vw, 24px)" }}>
+      <div className="card" style={{ marginTop: "clamp(16px, 3vw, 24px)" }}>
+        <h1 style={{ fontSize: "clamp(28px, 6vw, 36px)" }}>{rescheduleId ? "Reschedule Appointment" : "Book an Appointment"}</h1>
+        <p className="subtitle" style={{ fontSize: "clamp(14px, 2vw, 16px)" }}>
           {rescheduleId
             ? "Choose a new date and time for your appointment."
             : "Pick your doctor, choose a date, and select a time slot."}
         </p>
 
         {err ? (
-          <div className="helper" style={{ color: "#b91c1c" }}>
+          <div className="helper" style={{ color: "#b91c1c", padding: "8px 0" }}>
             ⚠ {err}
           </div>
         ) : null}
         {msg ? (
-          <div className="helper" style={{ color: "#065f46" }}>
+          <div className="helper" style={{ color: "#065f46", padding: "8px 0" }}>
             ✔ {msg}
           </div>
         ) : null}
 
         <form
           className="form"
-          style={{ gridTemplateColumns: "1.2fr 1fr 1fr", gap: 12 }}
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 150px), 1fr))", gap: "clamp(10px, 2vw, 12px)" }}
           onSubmit={onBook}
         >
           <select
@@ -222,6 +224,7 @@ export default function Appointments() {
             value={doctorId}
             onChange={(e) => setDoctorId(e.target.value)}
             required
+            style={{ padding: "clamp(10px, 2vw, 12px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}
           >
             {!doctorId && <option value="">Select a doctor…</option>}
             {doctors.map((d) => (
@@ -238,6 +241,7 @@ export default function Appointments() {
             value={dateISO}
             onChange={(e) => setDateISO(e.target.value)}
             required
+            style={{ padding: "clamp(10px, 2vw, 12px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}
           />
 
           <input
@@ -245,6 +249,7 @@ export default function Appointments() {
             value={patientId}
             readOnly
             title="Your patient id"
+            style={{ padding: "clamp(10px, 2vw, 12px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}
           />
         </form>
 
@@ -330,11 +335,12 @@ export default function Appointments() {
           </div>
         </Section>
 
-        <div style={{ marginTop: 18, display: "flex", gap: 12 }}>
+        <div style={{ marginTop: "clamp(14px, 2vw, 18px)", display: "flex", gap: "clamp(8px, 2vw, 12px)", flexWrap: "wrap" }}>
           <button
             className="btn"
             onClick={onBook}
             disabled={loading || !selected}
+            style={{ flex: "1 1 120px", padding: "12px 16px", fontSize: "clamp(13px, 1.5vw, 14px)" }}
           >
             {loading
               ? rescheduleId
@@ -350,6 +356,9 @@ export default function Appointments() {
             className="btn"
             onClick={() => nav("/doctors")}
             style={{
+              flex: "1 1 120px",
+              padding: "12px 16px",
+              fontSize: "clamp(13px, 1.5vw, 14px)",
               background: "#fff",
               color: "var(--blue-700)",
               border: "1px solid #c7d2fe",

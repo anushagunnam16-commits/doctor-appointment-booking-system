@@ -89,12 +89,12 @@ function MyAppointments() {
   }
 
   if (loading) {
-    return <div style={{ padding: "16px" }}>Loading your appointments...</div>;
+    return <div style={{ padding: "clamp(16px, 3vw, 24px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}>Loading your appointments...</div>;
   }
 
   if (error) {
     return (
-      <div style={{ padding: "16px", color: "red" }}>
+      <div style={{ padding: "clamp(16px, 3vw, 24px)", color: "red", fontSize: "clamp(13px, 1.5vw, 14px)" }}>
         Error: {error}
       </div>
     );
@@ -102,17 +102,17 @@ function MyAppointments() {
 
   if (!appointments.length) {
     return (
-      <div style={{ padding: "16px" }}>
-        You don’t have any appointments yet.
+      <div style={{ padding: "clamp(16px, 3vw, 24px)", fontSize: "clamp(13px, 1.5vw, 14px)" }}>
+        You don't have any appointments yet.
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ marginTop: 24 }}>
-        <h1>My Appointments</h1>
-        <p className="subtitle">
+    <div className="container" style={{ padding: "clamp(16px, 3vw, 24px)" }}>
+      <div className="card" style={{ marginTop: "clamp(16px, 3vw, 24px)" }}>
+        <h1 style={{ fontSize: "clamp(28px, 6vw, 36px)" }}>My Appointments</h1>
+        <p className="subtitle" style={{ fontSize: "clamp(14px, 2vw, 16px)" }}>
           View, cancel, or reschedule your upcoming visits.
         </p>
 
@@ -121,18 +121,18 @@ function MyAppointments() {
             style={{
               width: "100%",
               borderCollapse: "collapse",
-              marginTop: "12px",
+              marginTop: "clamp(10px, 2vw, 12px)",
             }}
           >
             <thead>
               <tr>
-                <th style={thStyle}>Date</th>
-                <th style={thStyle}>Time</th>
-                <th style={thStyle}>Doctor</th>
-                <th style={thStyle}>City</th>
-                <th style={thStyle}>Fee</th>
-                <th style={thStyle}>Status</th>
-                <th style={thStyle}>Actions</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Date</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Time</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Doctor</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>City</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Fee</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Status</th>
+                <th style={{...thStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -146,19 +146,19 @@ function MyAppointments() {
 
                 return (
                   <tr key={a.id}>
-                    <td style={tdStyle}>{a.date}</td>
-                    <td style={tdStyle}>{a.time}</td>
-                    <td style={tdStyle}>{a.doctorName}</td>
-                    <td style={tdStyle}>{a.city}</td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>{a.date}</td>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>{a.time}</td>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>{a.doctorName}</td>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>{a.city}</td>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>
                       {a.fee != null ? `$${a.fee}` : "-"}
                     </td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>
                       <span
                         style={{
-                          padding: "2px 8px",
+                          padding: "clamp(3px, 0.5vw, 4px) clamp(6px, 1vw, 8px)",
                           borderRadius: "999px",
-                          fontSize: "12px",
+                          fontSize: "clamp(11px, 1.3vw, 12px)",
                           backgroundColor: "#f0f0f0",
                           color: statusColor(a.status),
                           textTransform: "capitalize",
@@ -167,13 +167,13 @@ function MyAppointments() {
                         {a.status || "booked"}
                       </span>
                     </td>
-                    <td style={tdStyle}>
-                      <div style={{ display: "flex", gap: 8 }}>
+                    <td style={{...tdStyle, fontSize: "clamp(12px, 1.5vw, 14px)"}}>
+                      <div style={{ display: "flex", gap: "clamp(4px, 0.8vw, 8px)", flexWrap: "wrap" }}>
                         <button
                           className="btn"
                           style={{
-                            padding: "6px 10px",
-                            fontSize: 12,
+                            padding: "clamp(5px, 1vw, 6px) clamp(8px, 1.5vw, 10px)",
+                            fontSize: "clamp(11px, 1.3vw, 12px)",
                             background:
                               "linear-gradient(135deg,#f97316,#ea580c)",
                           }}
@@ -185,8 +185,8 @@ function MyAppointments() {
                         <button
                           className="btn"
                           style={{
-                            padding: "6px 10px",
-                            fontSize: 12,
+                            padding: "clamp(5px, 1vw, 6px) clamp(8px, 1.5vw, 10px)",
+                            fontSize: "clamp(11px, 1.3vw, 12px)",
                             background:
                               "linear-gradient(135deg,#ef4444,#b91c1c)",
                           }}
@@ -211,13 +211,15 @@ function MyAppointments() {
 const thStyle = {
   textAlign: "left",
   borderBottom: "1px solid #ddd",
-  padding: "8px",
+  padding: "clamp(6px, 1vw, 8px)",
   fontWeight: 600,
+  fontSize: "clamp(12px, 1.5vw, 14px)",
 };
 
 const tdStyle = {
   borderBottom: "1px solid #eee",
-  padding: "8px",
+  padding: "clamp(6px, 1vw, 8px)",
+  fontSize: "clamp(12px, 1.5vw, 14px)",
 };
 
 export default MyAppointments;

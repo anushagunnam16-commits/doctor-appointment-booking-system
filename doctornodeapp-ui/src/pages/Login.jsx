@@ -36,13 +36,13 @@ export default function Login() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ maxWidth: 460, margin: "40px auto" }}>
-        <h1>Welcome back</h1>
+    <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", padding: "24px" }}>
+      <div className="card" style={{ width: "100%", maxWidth: 460, margin: "20px auto" }}>
+        <h1 style={{ fontSize: "clamp(28px, 6vw, 32px)" }}>Welcome back</h1>
         <p className="subtitle">
           Sign in to book appointments and manage your profile.
         </p>
-        <form className="form" onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit} style={{ display: "grid", gap: "14px" }}>
           <input
             className="input"
             type="email"
@@ -50,6 +50,7 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            style={{ width: "100%", padding: "12px 14px" }}
           />
           <input
             className="input"
@@ -58,17 +59,19 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            style={{ width: "100%", padding: "12px 14px" }}
           />
           {error && (
-            <div className="helper" style={{ color: "#b91c1c" }}>
+            <div className="helper" style={{ color: "#b91c1c", padding: "8px 0" }}>
               ⚠ {error}
             </div>
           )}
-          <button className="btn" disabled={loading}>
+          <button className="btn" disabled={loading} style={{ width: "100%", padding: "12px 16px", fontSize: "clamp(14px, 2vw, 16px)" }}>
             {loading ? "Signing in…" : "Sign in"}
           </button>
         </form>
-        <p className="helper" style={{ marginTop: 14 }}>
+        
+        <p className="helper" style={{ marginTop: "14px", textAlign: "center" }}>
           New here? <Link to="/register">Create an account</Link>
         </p>
       </div>
